@@ -184,50 +184,58 @@ void Scene_Main::renderUI()
     ImGui::Text("Framerate: %d", (int)m_game->framerate());
     ImGui::EndMainMenuBar();
 
+    ImGui::Begin("Controls");
+    ImGui::BeginTabBar("ControlTabs");
+
     // Source
 
-    ImGui::Begin("Source", &m_drawUI);
-
-    if (ImGui::BeginCombo("Selected Source", m_sourceID.c_str()))
+    if (ImGui::BeginTabItem("Source", &m_drawUI))
     {
-        for (auto & [name, _] : m_sourceMap)
+        
+        if (ImGui::BeginCombo("Selected Source", m_sourceID.c_str()))
         {
-            bool selected = name == m_sourceID;
-            if (ImGui::Selectable(name.c_str(), &selected))
+            for (auto & [name, _] : m_sourceMap)
             {
-                setSource(name);
+                bool selected = name == m_sourceID;
+                if (ImGui::Selectable(name.c_str(), &selected))
+                {
+                    setSource(name);
+                }
             }
+            ImGui::EndCombo();
         }
-        ImGui::EndCombo();
+
+        ImGui::Separator();
+
+        m_source->imgui();
+
+        ImGui::EndTabItem();
     }
-
-    ImGui::Separator();
-
-    m_source->imgui();
-    
-    ImGui::End();
 
     // Processor
 
-    ImGui::Begin("Processor", &m_drawUI);
-
-    if (ImGui::BeginCombo("Selected Processor", m_processorID.c_str()))
+    if (ImGui::BeginTabItem("Processor", &m_drawUI))
     {
-        for (auto & [name, _] : m_processorMap)
+        if (ImGui::BeginCombo("Selected Processor", m_processorID.c_str()))
         {
-            bool selected = name == m_processorID;
-            if (ImGui::Selectable(name.c_str(), &selected))
+            for (auto & [name, _] : m_processorMap)
             {
-                setProcessor(name);
+                bool selected = name == m_processorID;
+                if (ImGui::Selectable(name.c_str(), &selected))
+                {
+                    setProcessor(name);
+                }
             }
+            ImGui::EndCombo();
         }
-        ImGui::EndCombo();
+        ImGui::Separator();
+
+        m_processor->imgui();
+
+        ImGui::EndTabItem();
     }
 
-    ImGui::Separator();
-
-    m_processor->imgui();
-
+    ImGui::EndTabBar();
     ImGui::End();
 }
 
